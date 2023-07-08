@@ -22,11 +22,22 @@ export default function Game() {
 
     const moves = history.map((_, move) => {
         let description;
+
         if (move > 0) {
             description = "Go to move #" + move;
         }
         else {
             description = "Go to move Game Start";
+        }
+
+        if (move === currentMove) {
+            return (
+                <li key={move}>
+                    <div>
+                        {"You are at move #" + move}
+                    </div>
+                </li>
+            )
         }
 
         return (
