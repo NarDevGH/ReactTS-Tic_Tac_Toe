@@ -6,7 +6,7 @@ import { BoardSquares } from "./Board";
 export default function Game() {
     const boardSize: number = 3;
 
-    const [history, setHistory] = useState<Array<BoardSquares>>([Array(9).fill(null)]);
+    const [history, setHistory] = useState<Array<BoardSquares>>([Array(boardSize * boardSize).fill(null)]);
     const [currentMove, setCurrentMove] = useState<number>(0);
     const [ascending, setAscending] = useState<boolean>(true);
 
