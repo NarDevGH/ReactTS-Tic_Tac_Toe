@@ -4,6 +4,8 @@ import Board from "./Board"
 import { BoardSquares } from "./Board";
 
 export default function Game() {
+    const boardSize: number = 3;
+
     const [history, setHistory] = useState<Array<BoardSquares>>([Array(9).fill(null)]);
     const [currentMove, setCurrentMove] = useState<number>(0);
     const [ascending, setAscending] = useState<boolean>(true);
@@ -21,11 +23,34 @@ export default function Game() {
         setCurrentMove(move);
     }
 
+    function moveBoardIndex(move: number): number {
+        const moveBoard = history[move];
+        const prevBoard = history[move - 1];
+        for (let i = 0; i < moveBoard.length; i++) {
+            if (moveBoard[i] != prevBoard[i]) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    function moveRow(moveIndex: number) {
+        return Number((moveIndex / boardSize).toFixed(0)) + 1;
+    }
+
+    function moveColumn(moveIndex: number) {
+        return Number((moveIndex % boardSize).toFixed(0)) + 1;
+    }
+
     const moves = history.map((_, move) => {
         let description;
 
         if (move > 0) {
-            description = "Go to move #" + move;
+            const moveIndex = moveBoardIndex(move);
+
+            const row = moveRow(moveIndex);
+            const column = moveColumn(moveIndex);
+            description = `Go to move # ${move} (${row},${column})`;
         }
         else {
             description = "Go to move Game Start";
@@ -55,7 +80,11 @@ export default function Game() {
     return (
         <div className="game">
             <div className="game-board">
-                <Board isXTurn={isXTurn} squares={currentSquares} onPlay={handlePlay} />
+                <Board
+                    size={boardSize}
+                    isXTurn={isXTurn}
+                    squares={currentSquares}
+                    onPlay={handlePlay} />
             </div>
             <div className="game-info">
                 <label>

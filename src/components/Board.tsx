@@ -25,12 +25,13 @@ function calculateWinner(squares: BoardSquares): string | null {
 
 
 type BoardProps = {
+    size: number
     isXTurn: boolean,
     squares: BoardSquares,
     onPlay: (x: BoardSquares) => void
 }
 
-const Board = ({ isXTurn, squares, onPlay }: BoardProps) => {
+const Board = ({ size, isXTurn, squares, onPlay }: BoardProps) => {
 
     const handleClick = (i: number) => {
         // If square not null return
@@ -78,7 +79,7 @@ const Board = ({ isXTurn, squares, onPlay }: BoardProps) => {
         <>
             <div className="status">{status}</div>
 
-            {RenderBoard(3)}
+            {RenderBoard(size)}
         </>
     )
 }
