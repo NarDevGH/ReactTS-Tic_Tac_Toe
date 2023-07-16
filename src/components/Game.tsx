@@ -94,9 +94,9 @@ export default function Game() {
                         onChange={(e) => setAscending(e.target.checked)} />
                     Ascending
                 </label>
-                <ol>
+                <ul>
                     {moves}
-                </ol>
+                </ul>
             </div>
         </div>
     )
