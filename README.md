@@ -9,4 +9,4 @@ https://nardev-tic-tac-toe.netlify.app/
 
 ### TODO:
 
-- When someone wins, highlight the three squares that caused the win (and when no one wins, display a message about the result being a draw).
+- When someone wins, highlight the squares that caused the win (and when no one wins, display a message about the result being a draw).
