@@ -27,7 +27,7 @@ export default function Game() {
         const moveBoard = history[move];
         const prevBoard = history[move - 1];
         for (let i = 0; i < moveBoard.length; i++) {
-            if (moveBoard[i] != prevBoard[i]) {
+            if (moveBoard[i] && moveBoard[i] != prevBoard[i]) {
                 return i;
             }
         }
