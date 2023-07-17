@@ -6,10 +6,10 @@ export type BoardSquares = Array<string | null>;
 function calculateWinner(squares: BoardSquares, size: number): string | null {
 
     //Check rows
-    for (let i = 0; i < size; i++) {
-        for (let j = 0; j < size - 2; j++) {
-            if (squares[j + i] && squares[j + i] === squares[j + i + 1] && squares[j + i] === squares[j + i + 2]) {
-                return squares[j + i];
+    for (let y = 0; y < size * size; y += size) {
+        for (let x = 0; x < size - 2; x++) {
+            if (squares[x + y] && squares[x + y] === squares[x + y + 1] && squares[x + y] === squares[x + y + 2]) {
+                return squares[x + y];
             }
         }
     }
