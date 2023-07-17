@@ -45,9 +45,9 @@ export default function Game() {
     const moves = history.map((_, move) => {
         let description;
 
-            const moveIndex = moveBoardIndex(move);
-            const row = moveRow(moveIndex);
-            const column = moveColumn(moveIndex);
+        const moveIndex = moveBoardIndex(move);
+        const row = moveRow(moveIndex);
+        const column = moveColumn(moveIndex);
 
         if (move > 0) {
             description = `Go to move # ${move} (${row},${column})`;
