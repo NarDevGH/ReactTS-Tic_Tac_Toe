@@ -3,23 +3,44 @@ import Square from "./Square";
 
 export type BoardSquares = Array<string | null>;
 
-function calculateWinner(squares: BoardSquares): string | null {
-    const lines: Array<Array<number>> = [
-        // [0, 1, 2],
-        // [3, 4, 5],
-        // [6, 7, 8],
-        // [0, 3, 6],
-        // [1, 4, 7],
-        // [2, 5, 8],
-        // [0, 4, 8],
-        // [2, 4, 6]
-    ];
-    for (let i = 0; i < lines.length; i++) {
-        const [a, b, c] = lines[i];
-        if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
-            return squares[a];
+function calculateWinner(squares: BoardSquares, size: number): string | null {
+
+    //Check rows
+    for (let i = 0; i < size; i++) {
+        for (let j = 0; j < size - 2; j++) {
+            if (squares[j + i] && squares[j + i] === squares[j + i + 1] && squares[j + i] === squares[j + i + 2]) {
+                return squares[j + i];
+            }
         }
     }
+
+    // Check columns
+    for (let i = 0; i < size; i++) {
+        for (let j = 0; j < size * size - size * 2; j += 6) {
+            if (squares[j + i] && squares[j + i] === squares[j + i + size] && squares[j + i] === squares[j + i + size * 2]) {
+                return squares[j + i];
+            }
+        }
+    }
+
+    // check diagonals_1 (left2right)
+    for (let y = 0; y < size * size - size * 2; y += 6) {
+        for (let x = 0; x < size - 2; x++) {
+            if (squares[x + y] && squares[x + y] === squares[x + y + size + 1] && squares[x + y] === squares[x + y + size * 2 + 2]) {
+                return squares[x + y];
+            }
+        }
+    }
+
+    // check diagonals_2 (right2left)
+    for (let y = 0; y < size * size - size * 2; y += 6) {
+        for (let x = size; x > 1; x--) {
+            if (squares[x + y] && squares[x + y] === squares[x + y + size - 1] && squares[x + y] === squares[x + y + size * 2 - 2]) {
+                return squares[x + y];
+            }
+        }
+    }
+
     return null;
 }
 
@@ -37,7 +58,7 @@ const Board = ({ size, isXTurn, squares, onPlay }: BoardProps) => {
         // If square not null return
         if (squares[i]) return;
         // If game over return
-        if (calculateWinner(squares)) return;
+        if (calculateWinner(squares, size)) return;
 
         const nextSquares = squares.slice();
         isXTurn ? nextSquares[i] = "X" : nextSquares[i] = "O";
@@ -67,7 +88,7 @@ const Board = ({ size, isXTurn, squares, onPlay }: BoardProps) => {
 
     let status: string;
 
-    const winner: string | null = calculateWinner(squares);
+    const winner: string | null = calculateWinner(squares, size);
     if (winner) {
         status = `Winner is ${winner}`;
     }
