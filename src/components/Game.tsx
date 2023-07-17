@@ -45,11 +45,11 @@ export default function Game() {
     const moves = history.map((_, move) => {
         let description;
 
-        if (move > 0) {
             const moveIndex = moveBoardIndex(move);
-
             const row = moveRow(moveIndex);
             const column = moveColumn(moveIndex);
+
+        if (move > 0) {
             description = `Go to move # ${move} (${row},${column})`;
         }
         else {
@@ -60,7 +60,7 @@ export default function Game() {
             return (
                 <li key={move}>
                     <div>
-                        {"You are at move #" + move}
+                        {`You are at move # ${move} (${row},${column})`}
                     </div>
                 </li>
             )
