@@ -57,13 +57,24 @@ export default function Game() {
         }
 
         if (move === currentMove) {
-            return (
-                <li key={move}>
-                    <div>
-                        {`You are at move # ${move} (${row},${column})`}
-                    </div>
-                </li>
-            )
+            if (move > 0) {
+                return (
+                    <li key={move}>
+                        <div>
+                            {`You are at move # ${move} (${row},${column})`}
+                        </div>
+                    </li>
+                )
+            }
+            else {
+                return (
+                    <li key={move}>
+                        <div>
+                            {`You are at move # ${move}`}
+                        </div>
+                    </li>
+                )
+            }
         }
 
         return (
