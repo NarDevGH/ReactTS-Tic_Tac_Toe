@@ -3,13 +3,15 @@ import Square from "./Square";
 
 export type BoardSquares = Array<string | null>;
 
-function calculateWinner(squares: BoardSquares, size: number): string | null {
+type WinSquares = Array<number> | null;
+
+function calculateWinner(squares: BoardSquares, size: number): WinSquares {
 
     //Check rows
     for (let y = 0; y < size * size; y += size) {
         for (let x = 0; x < size - 2; x++) {
             if (squares[x + y] && squares[x + y] === squares[x + y + 1] && squares[x + y] === squares[x + y + 2]) {
-                return squares[x + y];
+                return new Array<number>(x + y, x + y + 1, x + y + 2);
             }
         }
     }
@@ -18,7 +20,7 @@ function calculateWinner(squares: BoardSquares, size: number): string | null {
     for (let i = 0; i < size; i++) {
         for (let j = 0; j < size * size - size * 2; j += 6) {
             if (squares[j + i] && squares[j + i] === squares[j + i + size] && squares[j + i] === squares[j + i + size * 2]) {
-                return squares[j + i];
+                return new Array<number>(j + i, j + i + size, j + i + size * 2);
             }
         }
     }
@@ -27,7 +29,7 @@ function calculateWinner(squares: BoardSquares, size: number): string | null {
     for (let y = 0; y < size * size - size * 2; y += 6) {
         for (let x = 0; x < size - 2; x++) {
             if (squares[x + y] && squares[x + y] === squares[x + y + size + 1] && squares[x + y] === squares[x + y + size * 2 + 2]) {
-                return squares[x + y];
+                return new Array<number>(x + y, x + y + size + 1, x + y + size * 2 + 2);
             }
         }
     }
@@ -36,7 +38,7 @@ function calculateWinner(squares: BoardSquares, size: number): string | null {
     for (let y = 0; y < size * size - size * 2; y += 6) {
         for (let x = size; x > 1; x--) {
             if (squares[x + y] && squares[x + y] === squares[x + y + size - 1] && squares[x + y] === squares[x + y + size * 2 - 2]) {
-                return squares[x + y];
+                return new Array<number>(x + y, x + y + size - 1, x + y + size * 2 - 2);
             }
         }
     }
@@ -65,19 +67,32 @@ const Board = ({ size, isXTurn, squares, onPlay }: BoardProps) => {
         onPlay(nextSquares);
     }
 
-    const RenderSquare = (i: number) => <Square value={squares[i]} onClick={() => handleClick(i)} />
+    const RenderSquare = (i: number, winnerSquare: boolean) => {
+        return (
+            <Square
+                key={i}
+                value={squares[i]}
+                onClick={() => handleClick(i)}
+                winnerSquare={winnerSquare} />
+        )
+    }
 
-    const RenderBoard = (size: number) => {
+    const RenderBoard = (size: number, winnerSquare: WinSquares) => {
         const board = new Array();
 
         for (let i = 0; i < size * size; i += size) {
             let row = new Array();
             for (let j = 0; j < size; j++) {
-                row.push(RenderSquare(i + j));
+                if (winnerSquare && winnerSquare.indexOf(i + j) != -1) {
+                    row.push(RenderSquare(i + j, true));
+                }
+                else {
+                    row.push(RenderSquare(i + j, false));
+                }
             }
 
             board.push(
-                <div className="board-row">
+                <div className="board-row" key={i / size}>
                     {row}
                 </div>
             )
@@ -88,9 +103,13 @@ const Board = ({ size, isXTurn, squares, onPlay }: BoardProps) => {
 
     let status: string;
 
-    const winner: string | null = calculateWinner(squares, size);
+    const winnerSquares = calculateWinner(squares, size);
+    const winner: string | null = winnerSquares ? squares[winnerSquares[0]] : null;
     if (winner) {
         status = `Winner is ${winner}`;
+    }
+    else if (squares.indexOf(null) == -1) {
+        status = `Draw`;
     }
     else {
         status = `Next Player: ${isXTurn ? "X" : "O"}`;
@@ -100,7 +119,7 @@ const Board = ({ size, isXTurn, squares, onPlay }: BoardProps) => {
         <>
             <div className="status">{status}</div>
 
-            {RenderBoard(size)}
+            {RenderBoard(size, winnerSquares)}
         </>
     )
 }

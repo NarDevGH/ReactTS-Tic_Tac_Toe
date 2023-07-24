@@ -1,13 +1,13 @@
 
 type ValueProp = {
     value: string | null,
-    onClick: () => void
+    onClick: () => void,
+    winnerSquare: boolean
 }
 
-const Square = ({ value, onClick }: ValueProp) => {
-
+const Square = ({ value, onClick, winnerSquare: winner }: ValueProp) => {
     return (
-        <button className='square' onClick={onClick}>
+        <button className={winner ? 'winnerSquare' : 'square'} onClick={onClick}>
             {value}
         </button>
     )
